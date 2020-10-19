@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stu.student.mapper.StudentMapper">
+   <resultMap id="BaseResultMap" type="com.stu.student.domain.Student">
+        <id property="id" column="id"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+       <result property="sex" column="sex"/>
+       <result property="tel" column="tel"/>
+       <result property="grade" column="grade"/>
+       <result property="dept" column="dept"/>
+       <result property="major" column="major"/>
+       <result property="of_class" column="of_class"/>
+   </resultMap>
+    <select id="checkLogin" parameterType="student" resultType="Student">
+        select * from student where id = #{id} and password = #{password}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from student limit #{before},#{after}
+    </select>
+    <select id="count" resultType="int">
+        select count(*) from student
+    </select>
+
+    <select id="selectStudentById"  resultType="Student">
+        select * from student where id=#{id}
+    </select>
+
+    <select id="selectStudent" resultType="Student">
+        select * from student
+    </select>
+    <insert id="addStudent">
+            insert into student values(#{id},#{password},#{name},#{sex},#{tel},#{grade},#{dept},#{major},#{of_class})
+    </insert>
+
+    <update id="updateStudent">
+        update student set password=#{password},name=#{name},sex=#{sex},tel=#{tel},dept=#{dept},major=#{major},of_class=#{of_class}
+        where id=#{id}
+    </update>
+    <delete id="deleteStudent">
+        delete from student where id=#{id}
+    </delete>
+
+</mapper>

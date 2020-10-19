@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stu.student.mapper.GradeMapper">
+    <resultMap id="BaseResultMap" type="com.stu.student.domain.Grade">
+        <id property="student_id" column="student_id"/>
+        <id property="source_id" column="source_id"/>
+        <result property="grade" column="grade"/>
+        <result property="name" column="name"/>
+        <result property="tname" column="tname" />
+        <result property="address" column="address"/>
+        <result property="credit" column="credit"/>
+        <collection property="teacher" ofType="Teacher">
+            <id property="tid" column="tid" />
+            <result property="tname" column="tname" />
+        </collection>
+        <collection property="source" ofType="Source">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="teacher_id" column="teacher_id" />
+            <result property="address" column="address" />
+            <result property="credit" column="credit" />
+        </collection>
+    </resultMap>
+        <select id="selectAllGrade" resultMap="BaseResultMap">
+                select * from grade,source,teacher
+                where grade.source_id=source.id and source.teacher_id=teacher.tid
+                limit #{before},#{after}
+        </select>
+
+        <select id="selectGradeByStuId" resultMap="BaseResultMap">
+            select * from grade,source,teacher
+            where grade.source_id=source.id and source.teacher_id=teacher.tid
+            and grade.student_id=#{student_id}
+        </select>
+        <select id="count" resultType="int">
+            select count(*) from grade
+        </select>
+        <insert id="addGrade" >
+            insert into Grade(student_id, source_id,grade) values (#{student_id},#{source_id},#{grade})
+        </insert>
+        
+        <update id="updateGrade">
+            update grade set source_id=#{source_id},grade=#{exam} where student_id=#{student_id} and source_id=#{olderSource}
+        </update>
+
+        <delete id="deleteGrade">
+            delete  from grade where student_id=#{student_id} and source_id=#{source_id}
+        </delete>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stu.student.mapper.SourceMapper">
+    <resultMap id="BaseResultMap" type="com.stu.student.domain.Source">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="teacher_id" column="teacher_id"/>
+        <result property="address" column="address"/>
+        <result property="credit" column="credit"/>
+        <result property="tname" column="tname" />
+        <association property="teacher" javaType="Teacher">
+            <id property="tid" column="tid" />
+            <result property="tname" column="tname" />
+        </association>
+    </resultMap>
+    <select id="selectAllSource" resultMap="BaseResultMap">
+            select * from source,teacher
+            where source.teacher_id=teacher.tid limit #{before},#{after}
+    </select>
+    <select id="count" resultType="int">
+        select count(*) from source
+    </select>
+    <insert id="addSource">
+        insert  into source values(#{id},#{name},#{teacher_id},#{address},#{credit})
+    </insert>
+
+    <select id="selectSourceByName" resultMap="BaseResultMap">
+            select * from source,teacher
+            where source.teacher_id=teacher.tid and name=#{name}
+    </select>
+    <select id="selectSourceByStudent" resultType="Source">
+            select * from source where id not in (select source_id from grade where student_id=#{student_id})
+    </select>
+    <delete id="deleteSource">
+        delete from source where id=#{id}
+    </delete>
+    <update id="updateSource">
+        update source set name=#{name},teacher_id=#{teacher_id},address=#{address},credit=#{credit}
+        where id=#{id}
+    </update>
+</mapper>
